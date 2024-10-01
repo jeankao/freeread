@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'read',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'mongodb+srv://huechingkao:read@read.mfqyo.mongodb.net/?retryWrites=true&w=majority&appName=readt'
+            'host': 'mongodb://atlas-sql-66ee97aa6e6f1853607e36d2-mfqyo.a.query.mongodb.net/read?ssl=true&authSource=admin'
         }  
     }
     #'default': {
