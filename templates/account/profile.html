@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}個人檔案{% endblock %}
+{% load tag %}
+{% block content %}
+
+{% if user.id == user_id %}
+<a href="/account/password/{{user.id}}"><img src="/static/images/icon_edit1.png">修改密碼</a>　
+<a href="/account/realname"><img src="/static/images/icon_edit2.png">修改姓名</a>　
+<a href="/account/email"><img src="/static/images/icon_edit4.png">修改信箱</a><BR><BR>
+{% endif %}
+  
+  <h1>{{profile.user.first_name}}個人檔案</h1>
+<p>信箱：{{profile.user.email}}</p>
+<p>
+班級：
+{% for enroll in enrolls reversed %}
+{{enroll.classroom.name}}({{enroll.seat}}號)
+{% endfor %}
+</p>
+  <Table class="table">
+<tr><td rowspan=5 width=320><img src="/static/images/avatar/b{{ profile.avatar }}.png"></td></tr>
+<tr><td>總積分</td><td>{{credit}}</td><td><a href="/account/log/0/{{user_id}}">記錄</a></td></tr>
+<tr><td>作業積分</td><td>{{profile.work}}</td><td><a href="/account/log/1/{{user_id}}">記錄</a></td></tr>
+<tr><td>按讚積分</td><td>{{profile.like}}</td><td><a href="/account/log/2/{{user_id}}">記錄</a></td></tr>
+<tr><td>留言積分</td><td>{{profile.reply}}</td><td><a href="/account/log/3/{{user_id}}">記錄</a></td></tr>
+  </Table>
+{% endblock %}
+

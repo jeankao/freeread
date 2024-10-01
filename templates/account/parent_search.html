@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load tag %}
+{% block content %}    
+        <table class="table">
+            <td>帳號</td>
+            <td>姓名</td>
+            <td>最新登入</td>
+            <td>功能</td>
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td>{{user.username}}</td>
+                <td>{{user.first_name}}</td>
+                <td>{{user.last_login}}</td>
+                <td>
+                {% if user.id|parent:request.user.id %}<a href="#" data-userid="{{ user.id }}" data-studentid="{{ request.user.id }}" data-action="unset" class="parent btn btn-info" role="button">取消家長</a>{% else %}<a href="#" data-userid="{{ user.id }}" data-studentid={{request.user.id}} data-action="set" class="parent btn btn-default" role="button">設為家長</a>{% endif %}
+            </tr>
+        {% empty %}
+            帳號不存在 
+        {% endfor %}
+        </table>
+{% endblock %}
+
+{% block domready %}
+  $('a.parent').click(function(e){
+    var launcher = this;  
+    e.preventDefault();
+    $.post('/account/parent/make/',
+      {
+        userid: $(launcher).data('userid'),
+        studentid: $(launcher).data('studentid'),
+        action: $(launcher).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $(launcher).data('action');
+		      if (previous_action == 'set') {
+               $(launcher).removeClass("btn-default").addClass("btn-info");
+               $(launcher).html("取消家長");
+               $(launcher).data('action', 'unset');
+           } else {
+               $(launcher).removeClass("btn-info").addClass("btn-default");
+               $(launcher).html("設為家長");
+               $(launcher).data('action', 'set');  
+           }
+        } else {
+			   	alert("hello");
+	    	}
+      }
+    );
+  });
+{% endblock %}

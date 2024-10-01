@@ -1,0 +1,207 @@
+{% load tag %}<!DOCTYPE html>
+<!--
+Template Name: Jovaphile
+Author: <a href="http://www.os-templates.com/">OS Templates</a>
+Author URI: http://www.os-templates.com/
+Licence: Free to use under our free template licence terms
+Licence URI: http://www.os-templates.com/template-terms
+-->
+<html lang="zh-TW">
+<!-- To declare your language - read more here: https://www.w3.org/International/questions/qa-html-language-declarations -->
+<head>
+<title>{{ request|site_name }}閱讀網</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery.backtotop.js"></script>
+<script src="/static/js/jquery.mobilemenu.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<link href="/static/css/layout2.css" rel="stylesheet" type="text/css" media="all" />
+{% block header %}{% endblock %}		
+<style>	
+ .btn {
+    display: inline-block;	
+   	margin-bottom: 5px;
+    text-transform: none;	 
+	}
+	
+	blockquote {
+			font-size: 14px;
+		}
+		
+  .container {
+    padding-right: 0px;
+    padding-left: 0px;		
+	}
+	.scrollToTop{
+	width:80px; 
+	height:90px;
+	padding:1px; 
+	text-align:left; 
+	color: #FFF;
+	text-decoration: none;
+	position:fixed;
+	bottom:0px;
+	right:10px;
+	display:none;
+	background: url('/static/images/top.png') no-repeat 0px 20px;
+}
+.scrollToTop:hover{
+	text-decoration:none;
+}	
+		
+</style>
+
+  <!-- Optional theme -->
+<!--
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+-->
+<!-- Latest compiled and minified JavaScript -->
+</head>
+<body id="top" background="/static/images/back2.gif">
+<a href="#" class="scrollToTop"></a>	
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">{{ request|site_name }}</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav nospace linklist">
+           <li><a href="/"><img src="/static/images/icon_home.png"> 首頁</a></li>			
+				{% if request.user.is_authenticated %}
+			<li><a href="/account/dashboard/0"><img src="/static/images/icon_message.png"> 訊息{% if request.user.id|unread > 0 %}({{request.user.id|unread}}){% endif %}</a></li>
+					            <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"><img  width=16 src="/static/images/icon_forum.png">作業	<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+													<li><a href="/account/forum/{{user.id}}">討論區</a></li>
+													<li><a href="/account/speculation/{{user.id}}">思辨區</a></li>													
+						                        </ul>
+                    </li>
+										
+			<li><a href="/student/classroom/{% if request.user|has_group:'teacher' %}1{% else %}0{% endif %}"><img src="/static/images/icon_class.png"> 班級</a></li>
+						            <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"><img  width=16 src="/static/images/icon_doc.png">檔案	<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+													<li><a class="dropdown-item" href="/account/profile/{{user.id}}">積分</a></li>
+		<!--
+            <li><a class="dropdown-item" href="/account/profile/{{user.id}}#tab3">證書</a></li>
+		    <li><a class="dropdown-item" href="/account/event/calendar/{{user.id}}">登入記錄</a>			</li></li>
+		    <li><a class="dropdown-item" href="/account/event/timeline/{{user.id}}">使用記錄</a></li>
+-->
+						<li><a class="dropdown-item" href="/account/parent">設定家長</a></li>						
+
+                        </ul>
+                    </li>
+			{% if request.user.id|is_parent %}
+			<li><a href="/account/parent/child"><img src="/static/images/icon_male.png"> 家長</a></li>
+			{% endif %}
+						{% if request.user.id|assistant %}
+			<li><a href="/teacher/assistant"><img src="/static/images/icon_assistant.png"> 助教</a></li>
+					 {% endif %}								
+						{% if request.user|has_group:"teacher" %}
+			<li><a href="/teacher/classroom"><img src="/static/images/icon_teacher.png"> 教師</a></li>
+					 {% endif %}
+				{% endif %}
+ 			</ul>
+          <ul class="nav navbar-nav navbar-right">
+  		{% if request.user.is_authenticated %}		  
+          <li class="hidden-sm"><a href="/account/avatar/" style="padding:0px; padding-right:10px"><img src="/static/images/avatar/s{{request.user.profile.avatar}}.png" style="width:60px;margin:0px;">{{ request.user.first_name }}</a></li>
+				<li><a href="/account/logout" class='btn btn-default' role="btn">登出</a></li>
+			{% else %}
+			<li><a href="/account/register" class='btn btn-default' role="btn">註冊新帳號</a></li>
+			<li><a href="/account/login" class='btn btn-default' role="btn">登入</a> </li>
+			{% endif %}          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+</div>	
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<div class="container-fluid">
+  <main class="clear" style="padding-top: 80px"> 
+    <!-- main body -->
+  <section class="hoc clear"> 
+    <!-- ################################################################################################ -->		
+    <!-- ################################################################################################ -->
+    <div id="content" class="content"> 
+		{% block content %}{% endblock %}
+    </div>
+    <!-- ################################################################################################ -->
+		</section>
+    <!-- / main body -->
+  </main>
+</div>
+</div>
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<hr>
+<div class="wrapper container-fluid">
+  <div id="copyright" class="hoc clear fl_left"> 
+    <!-- ################################################################################################ -->
+    <p class="fl_left">Copyright &copy; 2017 - All Rights Reserved - <a href="/developer">網站開發：高慧君、魏仲良、賴錦緣</a> - 
+		<a href="/account/visitor"><img src="/static/images/icon_visitor.gif"> 訪客</a>
+		{% if request.user.id == 1 %}
+			<a href="/account/admin"><img src="/static/images/icon_admin.png"> 管理</a>
+		{% endif %}		
+		</p>
+		<!-- ################################################################################################ -->
+  </div>
+	
+</div>
+<!-- ################################################################################################ -->
+<!-- JAVASCRIPTS -->
+<script>
+  var csrftoken = $.cookie('csrftoken');
+  function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+  
+  $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      }
+    }
+  });
+  $(document).ready(function(){
+		$(window).scroll(function(){
+			if ($(this).scrollTop() > 100) {
+				$('.scrollToTop').fadeIn();
+			} else {
+				$('.scrollToTop').fadeOut();
+			}
+		});
+
+		//Click event to scroll to top
+		$('.scrollToTop').click(function(){
+			$('html, body').animate({scrollTop : 0},800);
+			return false;
+		});
+    //$('main').css('padding-top', $('.row0').height()+15+'px');		
+    //$('main').css('padding-top', $('.row0').height()+15+'px');
+    {% block domready %}
+    {% endblock %}
+  });
+	
+  {% block userscript %}
+  
+  {% endblock %}
+</script>  
+	{% block footer_script %}{% endblock %}
+	</body>
+</html>
